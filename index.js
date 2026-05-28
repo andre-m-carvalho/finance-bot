@@ -75,9 +75,59 @@ Retorne APENAS o JSON, sem explicações.`
     .trim();
   return JSON.parse(texto);
 }
+app.get('/login', (req, res) => {
+  const erro = req.query.erro;
+  res.send(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finanças Família</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card { background: white; border-radius: 16px; padding: 32px 24px; width: 100%; max-width: 360px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .icone { font-size: 36px; text-align: center; margin-bottom: 8px; }
+    h1 { text-align: center; font-size: 20px; font-weight: 700; color: #18181b; }
+    p { text-align: center; font-size: 13px; color: #71717a; margin-top: 4px; margin-bottom: 24px; }
+    label { font-size: 12px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; }
+    input { width: 100%; padding: 12px 14px; border: 1.5px solid #e4e4e7; border-radius: 8px; font-size: 16px; margin-top: 6px; margin-bottom: 16px; outline: none; transition: border 0.2s; }
+    input:focus { border-color: #18181b; }
+    button { width: 100%; padding: 13px; background: #18181b; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    button:active { opacity: 0.9; }
+    .erro { background: #fef2f2; color: #dc2626; font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icone">💰</div>
+    <h1>Finanças Família</h1>
+    <p>Entre com a senha para acessar</p>
+    ${erro ? '<div class="erro">Senha incorreta. Tenta de novo.</div>' : ''}
+    <form method="POST" action="/login">
+      <label>Senha</label>
+      <input type="password" name="senha" placeholder="••••••••" autofocus/>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+</body>
+</html>`);
+});
 
+app.post('/login', (req, res) => {
+  const senha = req.body.senha;
+  if (senha === process.env.DASHBOARD_SENHA) {
+    res.redirect('/dashboard?token=' + process.env.DASHBOARD_SENHA);
+  } else {
+    res.redirect('/login?erro=1');
+  }
+});
 // ─── DASHBOARD ───────────────────────────────────────────────
 app.get('/dashboard', async (req, res) => {
+      const token = req.query.token;
+  if (token !== process.env.DASHBOARD_SENHA) {
+    return res.redirect('/login');
+  }
       const senha = req.query.senha;
   if (senha !== process.env.DASHBOARD_SENHA) {
     return res.status(401).send('Acesso negado.');
