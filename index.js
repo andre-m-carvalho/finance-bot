@@ -105,8 +105,8 @@ app.post('/webhook', async (req, res) => {
       resposta = `🤔 Não entendi. Tenta assim:\n\n*Gasto:* "Padaria 28" ou "Mercado 150 compras da semana"\n*Renda:* "Recebi 3200" ou "Freela 800 pago"`;
     }
 
-  } catch (err) {
-    console.error(err);
+} catch (err) {
+    console.error('ERRO DETALHADO:', JSON.stringify(err.response?.data || err.message || err));
     resposta = '⚠️ Erro ao processar. Tenta de novo em instantes.';
   }
 
