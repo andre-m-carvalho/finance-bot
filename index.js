@@ -3,17 +3,21 @@ const axios = require('axios');
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 
+const logs = [];
+
+app.get('/logs', (req, res) => {
+  res.json(logs);
+});
+
 app.post('/webhook', async (req, res) => {
   const body = req.body.Body?.trim();
-  console.log('Mensagem recebida:', body);
-  console.log('Variáveis:', {
-    temAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
-    temSheetId: !!process.env.SPREADSHEET_ID,
-    temGoogleCreds: !!process.env.GOOGLE_CREDENTIALS,
-  });
+  logs.push('Mensagem recebida: ' + body);
+  logs.push('temAnthropicKey: ' + !!process.env.ANTHROPIC_API_KEY);
+  logs.push('temSheetId: ' + !!process.env.SPREADSHEET_ID);
+  logs.push('temGoogleCreds: ' + !!process.env.GOOGLE_CREDENTIALS);
 
   try {
-    console.log('Chamando Claude...');
+    logs.push('Chamando Claude...');
     const response = await axios.post(
       'https://api.anthropic.com/v1/messages',
       {
@@ -29,13 +33,13 @@ app.post('/webhook', async (req, res) => {
         }
       }
     );
-    console.log('Claude respondeu:', response.data.content[0].text);
+    logs.push('Claude respondeu: ' + response.data.content[0].text);
   } catch (err) {
-    console.error('ERRO CLAUDE:', err.response?.data || err.message);
+    logs.push('ERRO CLAUDE: ' + JSON.stringify(err.response?.data || err.message));
   }
 
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
-    <Response><Message>Diagnóstico enviado — veja os logs</Message></Response>`;
+    <Response><Message>Diagnóstico enviado</Message></Response>`;
   res.type('text/xml').send(twiml);
 });
 
