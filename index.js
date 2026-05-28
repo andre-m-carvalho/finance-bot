@@ -4,6 +4,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 
 const logs = [];
+console.log('ENV TEST:', Object.keys(process.env).filter(k => k.includes('ANTHROPIC') || k.includes('SHEET')));
 
 app.get('/logs', (req, res) => {
   res.json(logs);
