@@ -78,6 +78,10 @@ Retorne APENAS o JSON, sem explicações.`
 
 // ─── DASHBOARD ───────────────────────────────────────────────
 app.get('/dashboard', async (req, res) => {
+      const senha = req.query.senha;
+  if (senha !== process.env.DASHBOARD_SENHA) {
+    return res.status(401).send('Acesso negado.');
+  }
   try {
     const gastos = await lerAba('Gastos');
     const contasFixas = await lerAba('Contas Fixas');
