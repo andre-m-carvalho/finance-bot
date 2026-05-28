@@ -3,9 +3,7 @@ const axios = require('axios');
 const { google } = require('googleapis');
 const app = express();
 app.use(express.urlencoded({ extended: false }));
-app.get('/teste-senha', (req, res) => {
-  res.send('Senha: ' + (process.env.DASHBOARD_SENHA || 'VAZIA'));
-});
+
 
 const USUARIOS = {
   [process.env.SEU_NUMERO]: 'André',
