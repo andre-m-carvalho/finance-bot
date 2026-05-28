@@ -127,16 +127,10 @@ app.get('/login', (req, res) => {
 // ─── DASHBOARD ───────────────────────────────────────────────
 app.get('/dashboard', async (req, res) => {
 const token = req.query.token;
-  console.log('Token recebido:', JSON.stringify(token));
-  console.log('Senha esperada:', JSON.stringify(process.env.DASHBOARD_SENHA));
-  if (token !== process.env.DASHBOARD_SENHA) {
-    return res.send('Acesso negado. Token: ' + token + ' | Esperado: ' + process.env.DASHBOARD_SENHA);
-  }
-      const senha = req.query.senha;
-  if (senha !== process.env.DASHBOARD_SENHA) {
-    return res.status(401).send('Acesso negado.');
-  }
-  try {
+if (token !== process.env.DASHBOARD_SENHA) {
+  return res.redirect('/login');
+}
+try {
     const gastos = await lerAba('Gastos');
     const contasFixas = await lerAba('Contas Fixas');
 
