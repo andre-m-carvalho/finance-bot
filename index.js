@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const USUARIOS = {
   [process.env.SEU_NUMERO]: 'André',
-  [process.env.NUMERO_ESPOSA]: 'Esposa'
+  [process.env.NUMERO_ESPOSA]: 'Mariana'
 };
 
 async function getSheetsClient() {
