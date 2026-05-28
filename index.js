@@ -61,7 +61,11 @@ Retorne APENAS o JSON, sem explicações.`
     }
   );
 
-  const texto = response.data.content[0].text.trim();
+ const texto = response.data.content[0].text
+    .trim()
+    .replace(/```json\n?/g, '')
+    .replace(/```\n?/g, '')
+    .trim();
   return JSON.parse(texto);
 }
 
