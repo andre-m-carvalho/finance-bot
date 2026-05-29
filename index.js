@@ -46,28 +46,27 @@ async function interpretarMensagem(mensagem, quem) {
       max_tokens: 300,
       messages: [{
         role: 'user',
-        content: `Você é um assistente de finanças pessoais. Interprete a mensagem abaixo e retorne APENAS um JSON.
+    content: `Voce e um assistente de financas pessoais. Interprete a mensagem abaixo e retorne APENAS um JSON.
 
 Mensagem: "${mensagem}"
 Enviada por: ${quem}
 
 Regras:
-- Se for um GASTO, retorne: {"tipo":"gasto","valor":0.00,"local":"nome do lugar","categoria":"Alimentação|Transporte|Moradia|Saúde|Lazer|Vestuário|Outros","observacao":""}
-- Se for uma RENDA, retorne: {"tipo":"renda","valor":0.00,"fonte":"descrição","observacao":""}
-- Se não entender, retorne: {"tipo":"duvida"}
+- Se for um GASTO, retorne: {"tipo":"gasto","valor":0.00,"local":"nome do lugar","categoria":"Alimentacao|Transporte|Moradia|Saude|Lazer|Vestuario|Outros","observacao":""}
+- Se for uma RENDA, retorne: {"tipo":"renda","valor":0.00,"fonte":"descricao","observacao":""}
+- Se nao entender, retorne: {"tipo":"duvida"}
 
-Categorias comuns (use bom senso para outros casos):
-- Alimentação: padaria, mercado, supermercado, restaurante, lanchonete, ifood, delivery, café
-- Transporte: uber, 99, gasolina, posto, combustível, estacionamento, ônibus, metrô, táxi
-- Moradia: aluguel, condomínio, luz, água, gás, internet, telefone
-- Saúde: farmácia, médico, dentista, hospital, academia, plano de saúde
-- Lazer: cinema, show, viagem, hotel, streaming, Netflix, Spotify
-- Vestuário: roupa, sapato, shopping, acessórios
-- Educação: curso, livro, escola, faculdade
-- Outros: qualquer coisa que não se encaixe acima
+Categorias:
+- Alimentacao: padaria, mercado, supermercado, restaurante, lanchonete, ifood, delivery, cafe
+- Transporte: uber, 99, gasolina, posto, combustivel, estacionamento, onibus, metro, taxi
+- Moradia: aluguel, condominio, luz, agua, gas, internet, telefone
+- Saude: farmacia, medico, dentista, hospital, academia, plano de saude
+- Lazer: cinema, show, viagem, hotel, streaming, netflix, spotify
+- Vestuario: roupa, sapato, shopping, acessorios
+- Educacao: curso, livro, escola, faculdade
+- Outros: qualquer coisa que nao se encaixe acima
 
-Seja flexível — se a mensagem claramente é um gasto mesmo sem valor explícito, tente inferir. Se tiver valor numérico, sempre é um gasto ou renda.
-      }]
+Se a mensagem tiver um valor numerico, sempre e um gasto ou renda. Retorne APENAS o JSON, sem explicacoes.`
     },
     {
       headers: {
