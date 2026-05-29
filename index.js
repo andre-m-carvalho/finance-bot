@@ -46,10 +46,25 @@ async function interpretarMensagem(mensagem, quem) {
       max_tokens: 300,
       messages: [{
         role: 'user',
-    content: `Voce e um assistente de financas pessoais. Interprete a mensagem abaixo e retorne APENAS um JSON.
+        content: 'Voce e um assistente de financas pessoais. Interprete a mensagem abaixo e retorne APENAS um JSON.\n\nMensagem: "' + mensagem + '"\nEnviada por: ' + quem + '\n\nRegras:\n- Se for um GASTO, retorne: {"tipo":"gasto","valor":0.00,"local":"nome do lugar","categoria":"Alimentacao|Transporte|Moradia|Saude|Lazer|Vestuario|Outros","observacao":""}\n- Se for uma RENDA, retorne: {"tipo":"renda","valor":0.00,"fonte":"descricao","observacao":""}\n- Se nao entender, retorne: {"tipo":"duvida"}\n\nCategorias:\n- Alimentacao: padaria, mercado, supermercado, restaurante, lanchonete, ifood, delivery, cafe\n- Transporte: uber, 99, gasolina, posto, combustivel, estacionamento, onibus, metro, taxi\n- Moradia: aluguel, condominio, luz, agua, gas, internet, telefone\n- Saude: farmacia, medico, dentista, hospital, academia, plano de saude\n- Lazer: cinema, show, viagem, hotel, streaming, netflix, spotify\n- Vestuario: roupa, sapato, shopping, acessorios\n- Educacao: curso, livro, escola, faculdade\n- Outros: qualquer coisa que nao se encaixe acima\n\nSe a mensagem tiver um valor numerico, sempre e um gasto ou renda. Retorne APENAS o JSON, sem explicacoes.'
+      }]
+    },
+    {
+      headers: {
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+      }
+    }
+  );
+  const texto = response.data.content[0].text
+    .trim()
+    .replace(/```json\n?/g, '')
+    .replace(/```\n?/g, '')
+    .trim();
+  return JSON.parse(texto);
+}
 
-Mensagem: "${mensagem}"
-Enviada por: ${quem}
 
 Regras:
 - Se for um GASTO, retorne: {"tipo":"gasto","valor":0.00,"local":"nome do lugar","categoria":"Alimentacao|Transporte|Moradia|Saude|Lazer|Vestuario|Outros","observacao":""}
