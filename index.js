@@ -56,9 +56,17 @@ Regras:
 - Se for uma RENDA, retorne: {"tipo":"renda","valor":0.00,"fonte":"descrição","observacao":""}
 - Se não entender, retorne: {"tipo":"duvida"}
 
-Categorias: padaria/mercado/restaurante = Alimentação, uber/gasolina = Transporte, farmácia = Saúde, shopping/roupa = Vestuário.
+Categorias comuns (use bom senso para outros casos):
+- Alimentação: padaria, mercado, supermercado, restaurante, lanchonete, ifood, delivery, café
+- Transporte: uber, 99, gasolina, posto, combustível, estacionamento, ônibus, metrô, táxi
+- Moradia: aluguel, condomínio, luz, água, gás, internet, telefone
+- Saúde: farmácia, médico, dentista, hospital, academia, plano de saúde
+- Lazer: cinema, show, viagem, hotel, streaming, Netflix, Spotify
+- Vestuário: roupa, sapato, shopping, acessórios
+- Educação: curso, livro, escola, faculdade
+- Outros: qualquer coisa que não se encaixe acima
 
-Retorne APENAS o JSON, sem explicações.`
+Seja flexível — se a mensagem claramente é um gasto mesmo sem valor explícito, tente inferir. Se tiver valor numérico, sempre é um gasto ou renda.
       }]
     },
     {
