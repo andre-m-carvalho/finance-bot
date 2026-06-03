@@ -163,8 +163,7 @@ function buildDashboard(token, nomeMes, anoAtual, totalMes, pagas, pendentes, ca
     '<div class="conta-badge paga"><span>' + pagas + '</span><small>Pagas</small></div>',
     '<div class="conta-badge pendente"><span>' + pendentes + '</span><small>Pendentes</small></div>',
     '</div></div>',
-    '<div class="card full"><label>Gastos por categoria</label><div class="chart-wrap"><canvas id="grafico"></canvas></div></div>',
-    '<div class="card full"><label>Ultimos gastos</label><div class="lista">' + ultimosHtml + '</div></div>',
+'<div class="card full"><label>Gastos por categoria</label><div class="chart-wrap"><canvas id="grafico"></canvas></div>' + categorias.map(function(cat, i) { var pct = totalMes > 0 ? ((toFloat(valores[i]) / totalMes) * 100).toFixed(1) : '0.0'; return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f4f4f5;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:2px;background:' + cores[i] + '"></div><span style="font-size:13px;">' + cat + '</span></div><div style="text-align:right;"><span style="font-size:13px;font-weight:600;color:#18181b;">R$ ' + toFloat(valores[i]).toLocaleString("pt-BR", {minimumFractionDigits:2}) + '</span><span style="font-size:11px;color:#71717a;margin-left:8px;">' + pct + '%</span></div></div>'; }).join('') + '</div>',    '<div class="card full"><label>Ultimos gastos</label><div class="lista">' + ultimosHtml + '</div></div>',
     '</div>',
     '<p class="atualizado">Atualizado agora &middot; <a href="/dashboard?token=' + token + '" style="color:#71717a">Recarregar</a></p>',
     '</body></html>'
