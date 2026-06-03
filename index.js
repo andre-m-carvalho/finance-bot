@@ -124,8 +124,7 @@ app.get('/dashboard', async (req, res) => {
       + '<div class="card full"><label>Ultimos gastos</label><div class="lista">' + ultimosHtml + '</div></div>'
       + '</div>'
       + '<p class="atualizado">Atualizado agora · <a href="/dashboard?token=' + token + '" style="color:#71717a">Recarregar</a></p>'
-      + '<script>var ctx=document.getElementById("pizza").getContext("2d");new Chart(ctx,{type:"doughnut",data:{labels:' + JSON.stringify(categorias) + ',datasets:[{data:' + JSON.stringify(valores) + ',backgroundColor:' + JSON.stringify(cores.slice(0, categorias.length)) + ',borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{font:{size:11},padding:12}}}}});<\/script>'
-      + '</body></html>';
++ '<script>var ctx=document.getElementById("pizza").getContext("2d");new Chart(ctx,{type:"bar",indexAxis:"y",data:{labels:' + JSON.stringify(categorias) + ',datasets:[{data:' + JSON.stringify(valores) + ',backgroundColor:' + JSON.stringify(cores.slice(0, categorias.length)) + ',borderWidth:0,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return" R$ "+c.raw.toLocaleString("pt-BR",{minimumFractionDigits:2});}}}},scales:{x:{ticks:{callback:function(v){return"R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:2});},font:{size:10}},grid:{display:false}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});<\/script>'      + '</body></html>';
 
     res.send(html);
   } catch (err) {
