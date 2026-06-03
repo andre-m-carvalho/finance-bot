@@ -86,13 +86,12 @@ app.get('/dashboard', async (req, res) => {
       return parseInt(partes[1]) - 1 === mesAtual && parseInt(partes[2]) === anoAtual;
     });
 
-    const totalMes = gastosMes.reduce(function(sum, row) { return sum + (parseFloat(row[2]) || 0); }, 0);
+    const totalMes = gastosMes.reduce(function(sum, row) { return sum + (parseFloat((row[2] || '0').toString().replace(',', '.')) || 0); }, 0);
 
     const porCategoria = {};
     gastosMes.forEach(function(row) {
       var cat = row[4] || 'Outros';
-      porCategoria[cat] = (porCategoria[cat] || 0) + (parseFloat(row[2]) || 0);
-    });
+      porCategoria[cat] = (porCategoria[cat] || 0) + (parseFloat((row[2] || '0').toString().replace(',', '.')) || 0);
 
     const ultimos = gastosMes.slice(-5).reverse();
     const contas = contasFixas.slice(1).filter(function(r) { return r[0]; });
@@ -106,7 +105,7 @@ app.get('/dashboard', async (req, res) => {
     const ultimosHtml = ultimos.length === 0
       ? '<p style="color:#71717a;font-size:13px;margin-top:8px">Nenhum gasto registrado ainda</p>'
       : ultimos.map(function(r) {
-          return '<div class="lista-item"><div class="info"><span class="local">' + (r[3] || '-') + '</span><span class="detalhe">' + (r[4] || '') + ' · ' + (r[1] || '') + ' · ' + (r[0] || '') + '</span></div><span class="gasto-valor">R$ ' + parseFloat(r[2] || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '</span></div>';
+          return '<div class="lista-item"><div class="info"><span class="local">' + (r[3] || '-') + '</span><span class="detalhe">' + (r[4] || '') + ' · ' + (r[1] || '') + ' · ' + (r[0] || '') + '</span></div><span class="gasto-valor">R$ ' + parseFloat((r[2] || '0').toString().replace(',', '.')).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '</span></div>';
         }).join('');
 
     const html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Financas Familia</title><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"><\/script><style>* { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f4f4f5; color: #18181b; min-height: 100vh; } .header { background: #18181b; color: white; padding: 20px 24px; } .header h1 { font-size: 18px; font-weight: 600; } .header p { font-size: 13px; color: #a1a1aa; margin-top: 2px; text-transform: capitalize; } .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; } .card { background: white; border-radius: 12px; padding: 16px; } .card.full { grid-column: 1 / -1; } .card label { font-size: 11px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; display: block; } .valor { font-size: 28px; font-weight: 700; margin-top: 4px; } .vermelho { color: #ef4444; } .contas-row { display: flex; gap: 8px; margin-top: 10px; } .conta-badge { flex: 1; text-align: center; padding: 10px; border-radius: 8px; } .conta-badge.paga { background: #f0fdf4; color: #16a34a; } .conta-badge.pendente { background: #fef2f2; color: #dc2626; } .conta-badge span { display: block; font-size: 22px; font-weight: 700; } .conta-badge small { font-size: 11px; font-weight: 600; } .lista { margin-top: 12px; } .lista-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f4f4f5; } .lista-item:last-child { border-bottom: none; } .info { display: flex; flex-direction: column; } .local { font-size: 14px; font-weight: 500; } .detalhe { font-size: 11px; color: #71717a; margin-top: 2px; } .gasto-valor { font-size: 14px; font-weight: 600; color: #ef4444; } .chart-wrap { position: relative; height: 200px; margin-top: 12px; } .atualizado { text-align: center; font-size: 11px; color: #a1a1aa; padding: 12px; }</style></head><body>'
