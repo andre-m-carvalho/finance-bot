@@ -71,10 +71,12 @@ function buildDashboard(token, nomeMes, anoAtual, totalMes, pagas, pendentes, ca
   var labelsJs = JSON.stringify(categorias);
   var coresJs = JSON.stringify(cores.slice(0, categorias.length));
 
-  var chart = [
+  var chartScript = [
     '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"><\/script>',
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"><\/script>',
     '<script>',
     'window.onload = function() {',
+    '  Chart.register(ChartDataLabels);',
     '  var vals = ' + valsJs + ';',
     '  var ctx = document.getElementById("grafico").getContext("2d");',
     '  new Chart(ctx, {',
@@ -91,25 +93,23 @@ function buildDashboard(token, nomeMes, anoAtual, totalMes, pagas, pendentes, ca
     '    options: {',
     '      responsive: true,',
     '      maintainAspectRatio: false,',
+    '      layout: { padding: { top: 24 } },',
     '      plugins: {',
     '        legend: { display: false },',
-    '        tooltip: {',
-    '          callbacks: {',
-    '            label: function(c) {',
-    '              return " R$ " + c.raw.toLocaleString("pt-BR", {minimumFractionDigits: 2});',
-    '            }',
+    '        tooltip: { enabled: false },',
+    '        datalabels: {',
+    '          anchor: "end",',
+    '          align: "top",',
+    '          color: "#18181b",',
+    '          font: { size: 10, weight: "bold" },',
+    '          formatter: function(v) {',
+    '            return "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2 });',
     '          }',
     '        }',
     '      },',
     '      scales: {',
     '        x: { grid: { display: false }, ticks: { font: { size: 10 } } },',
-    '        y: {',
-    '          grid: { display: false },',
-    '          ticks: {',
-    '            callback: function(v) { return "R$ " + v.toLocaleString("pt-BR"); },',
-    '            font: { size: 10 }',
-    '          }',
-    '        }',
+    '        y: { display: false }',
     '      }',
     '    }',
     '  });',
@@ -117,12 +117,7 @@ function buildDashboard(token, nomeMes, anoAtual, totalMes, pagas, pendentes, ca
     '<\/script>'
   ].join('\n');
 
-  return [
-    '<!DOCTYPE html><html lang="pt-BR"><head>',
-    '<meta charset="UTF-8"/>',
-    '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>',
-    '<title>Financas Familia</title>',
-    chart,
+  var css = [
     '<style>',
     '* { box-sizing: border-box; margin: 0; padding: 0; }',
     'body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f4f4f5; color: #18181b; min-height: 100vh; }',
@@ -148,9 +143,19 @@ function buildDashboard(token, nomeMes, anoAtual, totalMes, pagas, pendentes, ca
     '.local { font-size: 14px; font-weight: 500; }',
     '.detalhe { font-size: 11px; color: #71717a; margin-top: 2px; }',
     '.gasto-valor { font-size: 14px; font-weight: 600; color: #ef4444; }',
-    '.chart-wrap { position: relative; height: 220px; margin-top: 12px; }',
+    '.chart-wrap { position: relative; height: 260px; margin-top: 12px; }',
     '.atualizado { text-align: center; font-size: 11px; color: #a1a1aa; padding: 12px; }',
-    '</style></head><body>',
+    '</style>'
+  ].join('\n');
+
+  return [
+    '<!DOCTYPE html><html lang="pt-BR"><head>',
+    '<meta charset="UTF-8"/>',
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>',
+    '<title>Financas Familia</title>',
+    chartScript,
+    css,
+    '</head><body>',
     '<div class="header"><h1>&#x1F4B0; Financas Familia</h1><p>' + nomeMes + ' de ' + anoAtual + '</p></div>',
     '<div class="grid">',
     '<div class="card full"><label>Total gasto no mes</label><div class="valor vermelho">R$ ' + totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + '</div></div>',
