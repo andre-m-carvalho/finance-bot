@@ -8,6 +8,7 @@ module.exports = function(mensagem, quem) {
     '',
     'Regras:',
     '- Se for um GASTO, retorne este JSON: {"tipo":"gasto","valor":0.00,"local":"nome do lugar","categoria":"Alimentacao","observacao":""}',
+    '- IMPORTANTE: o campo valor deve sempre ser um numero decimal. Exemplos: "26,80" deve virar 26.80, "150" deve virar 150.00, "9,99" deve virar 9.99',
     '- Se for uma RENDA, retorne este JSON: {"tipo":"renda","valor":0.00,"fonte":"descricao","observacao":""}',
     '- Se nao entender, retorne: {"tipo":"duvida"}',
     '',
